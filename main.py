@@ -21,6 +21,19 @@ class destination(db.Model): #this class will be used to create a table in the d
     country =db.Column(db.String(50),nullable = False)
     rating = db.Column(db.Float, nullable=False)
 
+#our model is now build up
+#so now I want to convert the dataset which is inside my class destination to a JSON file for reporting,cleaning, and anylsis
+#JSON is a type of data that can work with many languages ,is actually similart to python dictionaries
+
+    def to_dict(self) :
+        return {
+            "id" : self.id,
+            "destination" : self.destination,
+            "country" : self.country,
+            "rating" : self.rating
+    }
+
+#
 
 
 #Create routes
