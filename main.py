@@ -33,7 +33,10 @@ class destination(db.Model): #this class will be used to create a table in the d
             "rating" : self.rating
     }
 
-#
+#This code is creating an application context in Flask so that Flask extensions (like SQLAlchemy) know which Flask application 
+# they're working with.it also help us to create the database defined by the methods
+with app.app_context():
+    db.create_all() #This tells SQLAlchemy:"Create all the database tables that are defined by my models.
 
 
 #Create routes
