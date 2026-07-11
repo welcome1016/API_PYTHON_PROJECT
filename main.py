@@ -11,6 +11,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///travel.db' #this is the locat
 db = SQLAlchemy(app)
 
 
+#creating a model in the database which will houses the information of the database ,its like a wholes of row in the databse
+# this is done through a class
+#lets create a class
+
+class destination(db.Model): #this class will be used to create a table in the database
+    id = db.Column(db.Integer, primary_key=True) #this is the primary key of the table
+    destination = db.Column(db.String(50),nullable = False)
+    country =db.Column(db.String(50),nullable = False)
+    rating = db.Column(db.Float, nullable=False)
+
+
 
 #Create routes
 # a route is something like https://www.google.com/ or https://www.youtube.com/
