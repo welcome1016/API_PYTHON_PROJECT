@@ -65,6 +65,19 @@ def get_destination(destination_id) :
     else:
         return jsonify({"message": "Destination not found"}), 404
 
+#POST
+
+    data = request.get_json() #this will get the data from the request body
+    new_destination = destination(
+        destinations = data["destinations"],
+        country = data["country"],
+        rating = data["rating"]
+    )
+    db.session.add(new_destination) #this will add the new destination to the database
+    db.session.commit() #this will commit the changes to the database
+    return jsonify(new_destination.to_dict()), 201 #this will return the new destination as a JSON object with a 201 status code
+
+
 
 
 
