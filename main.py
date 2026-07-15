@@ -77,7 +77,19 @@ def get_destination(destination_id) :
     db.session.commit() #this will commit the changes to the database
     return jsonify(new_destination.to_dict()), 201 #this will return the new destination as a JSON object with a 201 status code
 
-
+#PUT it means apdate something , here will will apdate by ID
+@app.route("/destinations/<int:destination_id>", methods = ["PUT"])
+def update_destination(destination_id) :
+    destination = destination.query.get(destination_id)
+    if destination:
+        data = request.get_json()
+        destination.destinations = data["destinations"]
+        destination.country = data["country"]
+        destination.rating = data["rating"]
+        db.session.commit()
+        return jsonify(destination.to_dict())
+    else:
+        return jsonify({"message": "Destination not found"}), 404
 
 
 
