@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 
 class destination(db.Model): #this class will be used to create a table in the database
     id = db.Column(db.Integer, primary_key=True) #this is the primary key of the table
-    destination = db.Column(db.String(50),nullable = False)
+    destinations = db.Column(db.String(50),nullable = False)
     country =db.Column(db.String(50),nullable = False)
     rating = db.Column(db.Float, nullable=False)
 
@@ -28,7 +28,7 @@ class destination(db.Model): #this class will be used to create a table in the d
     def to_dict(self) :
         return {
             "id" : self.id,
-            "destination" : self.destination,
+            "destinations" : self.destinations,
             "country" : self.country,
             "rating" : self.rating
     }
@@ -40,13 +40,34 @@ with app.app_context():
 
 
 #Create routes
-# a route is something like https://www.google.com/ or https://www.youtube.com/
+# a route is something like 
+ #https://www.thenerdnook.io/
 @app.route('/')    # a home page is defined by the '/' route
 def home():
-    return "Hello, World!" # this will be displayed on the home page
+    return jsonify({"message": "welcome to the Travel API"}) # this will be displayed on the home page
+
+
+ #https://www.thenerdnook.io/destinations ,destination is an extender
+#we want to return all the destinations we have sent to our API that are in our database
+@app.route("/destinations", methods =["GET"])
+def get_destinations() :
+    destinations = destinations.query.all()
+
+    return jsonify([destinations.to_dict()] for destination in destinations)
+
+
+#https://www.thenerdnook.io/destinations/2 we're looking for ID 2 now
+@app.route("/destinations/<int:destination_id>", methods = ["GET"]) #this will constanly keep our app running and will be used to run the app
+def get_destination(destination_id) :
+    destination = destination.query.get(destination_id) 
+    if destination:
+        return jsonify(destination.to_dict())
+    else:
+        return jsonify({"message": "Destination not found"}), 404
 
 
 
-#this will constanly keep our app running and will be used to run the app
+
+
 if __name__ == '__main__':
     app.run(debug=True)
